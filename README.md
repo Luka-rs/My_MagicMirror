@@ -18,29 +18,35 @@ This project is a motion-activated MagicMirror² setup using a Raspberry Pi and 
 ### 🔧 Installation
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo apt update 
+sudo apt upgrade -y
 sudo apt install -y git curl
+
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install -y nodejs
+
 git clone https://github.com/MichMich/MagicMirror
 cd MagicMirror
 npm install
 ```
 
+We updated our Raspberry Pi, installed curl, installed the newest node.js, cloned the git and installed magic mirror on our system.
+
 ### ⚙️ Configuration
 
 Edit the config file:
+I copied the sample file for the structure
 
 ```bash
 cp config/config.js.sample config/config.js
 nano config/config.js
 ```
 
-Basic settings for Zürich, Switzerland with clock and OpenMeteo weather (no API key needed):
+Basic settings with clock and OpenMeteo weather (no API key needed):
 
 ```js
-language: "de",
-locale: "de-CH",
+language: "**",
+locale: "**-**",
 timeFormat: 24,
 units: "metric",
 modules: [
@@ -54,8 +60,8 @@ modules: [
     config: {
       weatherProvider: "openmeteo",
       type: "current",
-      lat: 47.3769,
-      lon: 8.5417
+      lat: **,
+      lon: **
     }
   },
   {
@@ -65,8 +71,8 @@ modules: [
     config: {
       weatherProvider: "openmeteo",
       type: "forecast",
-      lat: 47.3769,
-      lon: 8.5417
+      lat: **,
+      lon: **
     }
   }
 ]
@@ -76,7 +82,9 @@ modules: [
 
 ```bash
 sudo npm install -g pm2
+
 cd ~/MagicMirror
+
 DISPLAY=:0 pm2 start npm --name "magicmirror" -- start
 pm2 save
 pm2 startup
@@ -157,7 +165,7 @@ mkdir -p ~/.config/systemd/user
 nano ~/.config/systemd/user/monitor_control.service
 ```
 
-Paste this:
+Paste this to auto start the skript:
 
 ```ini
 [Unit]
@@ -174,10 +182,11 @@ Environment=XDG_RUNTIME_DIR=/run/user/1000
 WantedBy=default.target
 ```
 
-Enable the service:
+Now you only need to enable the service:
 
 ```bash
 loginctl enable-linger $USER
+
 systemctl --user daemon-reload
 systemctl --user enable monitor_control
 systemctl --user start monitor_control
